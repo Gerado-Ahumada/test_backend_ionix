@@ -25,18 +25,18 @@ public class SwaggerConfig implements WebMvcConfigurer {
 	public Docket api(ServletContext servletContext) {
 
 		return new Docket(DocumentationType.SWAGGER_2).
-		  				select().
-		  				apis(RequestHandlerSelectors.basePackage("cl.ionix")).
-		 				paths(PathSelectors.any()).
-		  				build().pathProvider(new RelativePathProvider(servletContext) {
-							 @Override
-							 public String getApplicationBasePath() {
-							 	if(pathServicesBalancer != null && !pathServicesBalancer.isEmpty()){
+						select().
+						apis(RequestHandlerSelectors.basePackage("cl.ionix")).
+						paths(PathSelectors.any()).
+						build().pathProvider(new RelativePathProvider(servletContext) {
+							@Override
+							public String getApplicationBasePath() {
+								if(pathServicesBalancer != null && !pathServicesBalancer.isEmpty()){
 									return pathServicesBalancer.concat(super.getApplicationBasePath());
 								}
-								 return super.getApplicationBasePath();
-							 }
-						 });
+								return super.getApplicationBasePath();
+							}
+						});
 	}
 
 	@Override

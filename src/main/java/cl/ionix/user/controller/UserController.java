@@ -32,7 +32,7 @@ public class UserController {
 	@ApiResponses(value = { @ApiResponse(code = 400, message = "Bad Request"),
 					@ApiResponse(code = 500, message = "Internal Server Error") })
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<ResponseUserDto> getAllUsers() {
+	public List<ResponseUserDto> getAllUsers() throws Error {
 		List<ResponseUserBo> userList = userService.findAll();
 		List<ResponseUserDto> listUserResponse = new ArrayList<ResponseUserDto>();
 		for (ResponseUserBo user : userList) {
@@ -51,7 +51,7 @@ public class UserController {
 					@ApiResponse(code = 422, message = "Unprocessable Entity"),
 					@ApiResponse(code = 500, message = "Internal Server Error") })
 	@GetMapping(value = "/@/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseUserDto getUserByEmail(@PathVariable ("email") String email) {
+	public ResponseUserDto getUserByEmail(@PathVariable ("email") String email) throws NoFoundEntryException{
 		ResponseUserBo responseUserBo = userService.findUserByEmail(email);
 		ResponseUserDto UserDto = new ResponseUserDto();
 		UserDto.setName(responseUserBo.getName());
@@ -86,8 +86,8 @@ public class UserController {
 					@ApiResponse(code = 500, message = "Internal Server Error") })
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseUserDto createUser(@RequestBody ResponseUserDto userDto)
-					throws DuplicatedEntryException
-	{userService.createUser(EntityUtilities.copyObjectFrom(userDto, ResponseUserBo.class));
+					throws DuplicatedEntryException, NoFoundEntryException {
+		userService.createUser(EntityUtilities.copyObjectFrom(userDto, ResponseUserBo.class));
 						return userDto;
 	}
 	@ResponseStatus (HttpStatus.OK)
