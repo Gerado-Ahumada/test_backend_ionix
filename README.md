@@ -10,4 +10,6 @@ roles: ADMIN_IONIX
 Base de datos utilizada Mysql: 
 name: "user_ionix"
 
+Gerardo Ahumada Lopez
+
 ===============
