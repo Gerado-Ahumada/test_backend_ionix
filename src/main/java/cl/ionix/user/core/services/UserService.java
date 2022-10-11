@@ -13,11 +13,13 @@ public interface UserService {
 
 	List<ResponseUserBo> findAll();
 
-	void createUser(ResponseUserBo user) throws DuplicatedEntryException;
+	void createUser(ResponseUserBo user) throws DuplicatedEntryException, NoFoundEntryException;
 
 	void updateUser(ResponseUserBo user);
 
 	void deleteUserByEmail(String email) throws NoFoundEntryException;
+
+
 
 
 }

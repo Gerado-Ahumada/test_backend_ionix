@@ -15,12 +15,16 @@ import java.util.List;
 
 @Repository
 public class UserServiceImpl implements UserService {
+
 	@Autowired
 	UserRepository userRepository;
 	UserEntity userEntity;
 
 	@Override
-	public ResponseUserBo findUserByEmail(String email) {
+	public ResponseUserBo findUserByEmail(String email) throws NullPointerException{
+		if (findUserByEmail(email)==null){
+			throw new NullPointerException("The User Email:  " + email + " don't exists!");
+		}
 		UserEntity user = userRepository.findByEmail(email);
 		ResponseUserBo responseUserBo = new ResponseUserBo();
 		responseUserBo.setName(user.getName());
@@ -58,12 +62,10 @@ public class UserServiceImpl implements UserService {
 	}
 	@Override
 	public void createUser(ResponseUserBo userBo) throws DuplicatedEntryException {
-		if (findUserByEmail(userBo.getEmail()) != null) {
-			throw new DuplicatedEntryException("The User Email '" + userBo.getEmail() + "' already exists!");
-		}
-		userEntity = EntityUtilities.copyObjectFrom(userBo, UserEntity.class );
-		userRepository.save(userEntity);
-	}
+			userEntity = EntityUtilities.copyObjectFrom(userBo, UserEntity.class );
+			userRepository.save(userEntity);
+			}
+
 	@Override
 	public void  updateUser(ResponseUserBo userBo) {
 		userEntity = EntityUtilities.copyObjectFrom(userBo, UserEntity.class );
@@ -76,4 +78,6 @@ public class UserServiceImpl implements UserService {
 			throw new NoFoundEntryException ("The User Email "+ email +"not Found");
 		} userRepository.deleteUserByEmail(email);
 	}
+
+
 }

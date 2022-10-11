@@ -26,10 +26,14 @@ spring:
   web:
     resources:
       add-mappings: false
+  security:
+    user:
+      name: "ionix"
+      password: "pw_ionix"
+      roles: ADMIN_IONIX
 server:
   port: 8080
   servlet:
     context-path: /ionix/user-api
-
 path-services-balancer: ${PATH_SERVICES_BALANCER:#{null}}
 debug: true

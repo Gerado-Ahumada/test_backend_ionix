@@ -1,4 +1,4 @@
-/**package cl.ionix.user.util.Security;
+package cl.ionix.user.config.Security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,7 @@ public class SecurityConfig {
   public InMemoryUserDetailsManager detailsManager() throws Exception{
     List<UserDetails> users=List.of(
             User.withUsername("ionix")
-                    .password("{noop}ionix")
+                    .password("{noop}pw_ionix")
                     .authorities("ADMIN_IONIX")
                     .build()
     );
@@ -39,4 +39,3 @@ public class SecurityConfig {
 
   }
 }
-**/
