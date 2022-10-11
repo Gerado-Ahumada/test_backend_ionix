@@ -1,0 +1,78 @@
+plugins {
+    id 'org.springframework.boot' version '2.5.2'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'java-library'
+    id "org.sonarqube" version '3.0'
+    id 'application'
+    id 'jacoco'
+}
+
+application {
+    mainClassName = 'cl.ionix.user.UserApplication'
+}
+
+group = 'cl.ionix.unired'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+
+    maven {
+        url 'https://lbdev.ionix.cl/artifactory/libs-release-local'
+        credentials {
+            username = 'gitlabrelease'
+            password = 'gitlabrelease'
+        }
+    }
+    maven {
+        url 'https://lbdev.ionix.cl/artifactory/libs-snapshot-local'
+        credentials {
+            username = 'gitlabrelease'
+            password = 'gitlabrelease'
+        }
+    }
+    mavenCentral()
+}
+
+dependencies {
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    compile group: 'org.springframework.security', name: 'spring-security-crypto'
+    implementation 'mysql:mysql-connector-java:8.0.30'
+
+    implementation group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
+    implementation group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
+    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
+    implementation group: 'org.hibernate', name: 'hibernate-core', version: '6.1.3.Final'
+
+    implementation group: 'ionix.utils', name: 'ionix-log', version: '2.1.1-RELEASE'
+    compile(group: 'ionix.utils', name: 'java-utilities', version: '1.0.0', classifier: 'RELEASE')
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+    testImplementation group: 'org.mockito', name: 'mockito-inline', version: '4.8.0'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.destination file("${buildDir}/reports/jacoco/jacocoHtml")
+    }
+}
