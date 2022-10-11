@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-class TestBackendApplicationTests {
+class TestsJunit {
 
 	@Autowired
 	MockMvc mockMvc;
