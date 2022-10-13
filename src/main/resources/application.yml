@@ -37,3 +37,4 @@ server:
     context-path: /ionix/user-api
 path-services-balancer: ${PATH_SERVICES_BALANCER:#{null}}
 debug: true
+url-external-service: ${URL-EXTERNAL-SERVICE}

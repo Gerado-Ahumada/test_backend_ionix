@@ -3,8 +3,7 @@ package cl.ionix.user.controller;
 import cl.ionix.user.controller.dto.ResponseUserDto;
 import cl.ionix.user.core.bo.ResponseUserBo;
 import cl.ionix.user.core.services.UserService;
-import cl.ionix.user.exception.DuplicatedEntryException;
-import cl.ionix.user.exception.NoFoundEntryException;
+import cl.ionix.user.exception.*;
 import cl.ionix.user.util.EntityUtilities;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -32,7 +31,7 @@ public class UserController {
 	@ApiResponses(value = { @ApiResponse(code = 400, message = "Bad Request"),
 					@ApiResponse(code = 500, message = "Internal Server Error") })
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<ResponseUserDto> getAllUsers() throws Error {
+	public List<ResponseUserDto> getAllUsers() throws Error, NoDataRegister {
 		List<ResponseUserBo> userList = userService.findAll();
 		List<ResponseUserDto> listUserResponse = new ArrayList<ResponseUserDto>();
 		for (ResponseUserBo user : userList) {
@@ -50,8 +49,8 @@ public class UserController {
 					@ApiResponse(code = 406, message = "Not Acceptable"),
 					@ApiResponse(code = 422, message = "Unprocessable Entity"),
 					@ApiResponse(code = 500, message = "Internal Server Error") })
-	@GetMapping(value = "/@/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseUserDto getUserByEmail(@PathVariable ("email") String email) throws NoFoundEntryException{
+	@GetMapping(value = "/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseUserDto getUserByEmail(@PathVariable ("email") String email) throws Exception{
 		ResponseUserBo responseUserBo = userService.findUserByEmail(email);
 		ResponseUserDto UserDto = new ResponseUserDto();
 		UserDto.setName(responseUserBo.getName());
@@ -59,7 +58,7 @@ public class UserController {
 		UserDto.setEmail(responseUserBo.getEmail());
 		UserDto.setPhone(responseUserBo.getPhone());
 		return UserDto;
-		}
+	}
 
 	@ApiOperation(value = "Get user by name", notes = "Response user by name searching ")
 	@ApiResponses(value = { @ApiResponse(code = 400, message = "Bad Request"),
@@ -67,8 +66,8 @@ public class UserController {
 					@ApiResponse(code = 406, message = "Not Acceptable"),
 					@ApiResponse(code = 422, message = "Unprocessable Entity"),
 					@ApiResponse(code = 500, message = "Internal Server Error") })
-	@GetMapping(value = "/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseUserDto getUserByName(@PathVariable ("name") String name) {
+	@GetMapping(value = "/name/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseUserDto getUserByName(@PathVariable ("name") String name) throws NoFoundEntryException {
 		ResponseUserBo responseUserBo = userService.findUserByName(name);
 		ResponseUserDto UserDto = new ResponseUserDto();
 		UserDto.setName(responseUserBo.getName());
@@ -76,7 +75,7 @@ public class UserController {
 		UserDto.setEmail(responseUserBo.getEmail());
 		UserDto.setPhone(responseUserBo.getPhone());
 		return UserDto;
-		}
+	}
 
 	@ResponseStatus (HttpStatus.CREATED)
 	@ApiOperation(value = "Create a new user", notes = "Create a new user")
@@ -85,10 +84,9 @@ public class UserController {
 					@ApiResponse(code = 422, message = "Unprocessable Entity"),
 					@ApiResponse(code = 500, message = "Internal Server Error") })
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseUserDto createUser(@RequestBody ResponseUserDto userDto)
-					throws DuplicatedEntryException, NoFoundEntryException {
+	public ResponseUserDto createUser(@RequestBody ResponseUserDto userDto) throws NoFoundFieldException, NoFoundEntryException, DuplicatedEntryException {
 		userService.createUser(EntityUtilities.copyObjectFrom(userDto, ResponseUserBo.class));
-						return userDto;
+		return userDto;
 	}
 	@ResponseStatus (HttpStatus.OK)
 	@ApiOperation(value = "Update user", notes = "Update user information")
@@ -98,7 +96,7 @@ public class UserController {
 					@ApiResponse(code = 422, message = "Unprocessable Entity"),
 					@ApiResponse(code = 500, message = "Internal Server Error") })
 	@PutMapping(value = "/update",produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseUserDto updateUser(@RequestBody ResponseUserDto userDto){
+	public ResponseUserDto updateUser(@RequestBody ResponseUserDto userDto) throws NoFoundEntryException, DuplicatedNameException, DuplicatedEntryException {
 		userService.updateUser(EntityUtilities.copyObjectFrom(userDto, ResponseUserBo.class));
 		return userDto;
 	}
