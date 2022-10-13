@@ -8,10 +8,10 @@ import java.util.Date;
 @Table(name = "user")
 public class UserEntity extends BaseEntity{
 
-		@Column(name = "name")
+		@Column(name = "name", unique = true)
 		private String name;
 
-		@Column(name = "username")
+		@Column(name = "username", unique = true)
 		private String username;
 
 		@Column(name = "email", unique = true)

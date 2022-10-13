@@ -23,8 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
   @Query("update UserEntity u set u.name = ?1, u.username = ?2, u.phone = ?3 where u.email like ?4")
   void setUserInfoByEmail(String name, String username, Integer phone, String email);
 
-  @Query("select (count(u) > 0) from UserEntity u where u.email is not null")
-  boolean emailValidate();
+
 
 
 
